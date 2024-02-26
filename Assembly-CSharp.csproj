@@ -61,6 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\My Assets\MultiDevice\SceneObjectsViewer.cs" />
+    <Compile Include="Assets\My Assets\MultiDevice\PointsCalculator.cs" />
     <Compile Include="Assets\My Assets\MultiDevice\AUTDMultiDevice.cs" />
     <Compile Include="Assets\Samples\autd3-unity\21.1.0\MultiDevice\MultiAUTD3Controller.cs" />
     <Compile Include="Assets\Samples\autd3-unity\21.1.0\MultiDevice\AUTD3Device.cs" />

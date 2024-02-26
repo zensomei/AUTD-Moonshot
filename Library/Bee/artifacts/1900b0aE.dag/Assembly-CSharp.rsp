@@ -360,6 +360,7 @@
 -analyzer:"C:/Program Files/Unity/Hub/Editor/2022.3.18f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll"
 -analyzer:"C:/Program Files/Unity/Hub/Editor/2022.3.18f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 "Assets/My Assets/MultiDevice/AUTDMultiDevice.cs"
+"Assets/My Assets/MultiDevice/PointsCalculator.cs"
 "Assets/My Assets/MultiDevice/SceneObjectsViewer.cs"
 "Assets/Samples/autd3-unity/21.1.0/MultiDevice/AUTD3Device.cs"
 "Assets/Samples/autd3-unity/21.1.0/MultiDevice/MultiAUTD3Controller.cs"
