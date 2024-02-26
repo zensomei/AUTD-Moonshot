@@ -29,8 +29,7 @@ public class AUTDMultiDevice : MonoBehaviour
     Quaternion realsenseRotation;
     Vector3 relativePosition;
 
-
-    private async void Awake()
+    private void Awake()
     {
         try
         {
@@ -42,7 +41,7 @@ public class AUTDMultiDevice : MonoBehaviour
                 builder.AddDevice(new AUTD3(obj.transform.position).WithRotation(obj.transform.rotation));
             }
 
-            _autd = await builder.OpenWithAsync(SOEM.Builder()
+            _autd = builder.OpenWith(SOEM.Builder()
                         .WithErrHandler((slave, status, msg) =>
                         {
                             switch (status)
@@ -74,16 +73,13 @@ public class AUTDMultiDevice : MonoBehaviour
 #endif
         }
 
-        if (_autd != null && Target != null)
-        {
-            await _autd.SendAsync(new AUTD3Sharp.Modulation.Sine(150)); // 150 Hz
-            await _autd.SendAsync(new AUTD3Sharp.Gain.Focus(Target.transform.position));
-            _oldPosition = Target.transform.position;
-        }
+        if (_autd != null) _autd.Send(new AUTD3Sharp.Modulation.Sine(150));
     }
+
     void Start()
     {
         _pointscalculator = GameObject.Find("PointCloud").GetComponent<PointsCalculator>();
+        if (_pointscalculator == null) Debug.Log("Points Calculator is not found");
 
         // シーン内からCamera_Realsenseオブジェクトを検索し、そのTransformを取得
         GameObject cameraRealsense = GameObject.Find("Camera_Realsense");
@@ -93,9 +89,11 @@ public class AUTDMultiDevice : MonoBehaviour
             realsenseRotation = cameraRealsense.transform.rotation;
             Debug.Log($"Camera_Realsense Position: {realsensePosition}, Rotation: {realsenseRotation.eulerAngles}");
         }
+
+        
     }
 
-    private async void LateUpdate()
+    private void Update()
     {
 #if UNITY_EDITOR
         if (!_isPlaying)
@@ -105,28 +103,22 @@ public class AUTDMultiDevice : MonoBehaviour
         }
 #endif
         if (_autd == null) return;
+        if (Target == null) return;
 
-        //relativePosition = _pointscalculator.Center;
-        if (Target != null) Target.transform.position = ConvertPosition(relativePosition);
-
-        //if (Target != null) Target.transform.position = realsensePosition + (realsenseRotation * _pointscalculator.Center);
-        //Debug.Log($"relativePosition: {_pointscalculator.Center}");
-
-        if (Target == null || Target.transform.position == _oldPosition) return;
-        await _autd.SendAsync(new AUTD3Sharp.Gain.Focus(Target.transform.position));
-        _oldPosition = Target.transform.position;
-    }
-
-    private void FixedUpdate()
-    {
         relativePosition = _pointscalculator.Center;
+        Target.transform.position = ConvertPosition(relativePosition);
+
         //Debug.Log($"relativePosition: {_pointscalculator.Center}");
+
+        if (Target.transform.position == _oldPosition) return;
+        _autd.Send(new AUTD3Sharp.Gain.Focus(Target.transform.position));
+        _oldPosition = Target.transform.position;
     }
 
     Vector3 ConvertPosition(Vector3 relativePosition)
     {
         Vector3 RealPosition = realsensePosition + (realsenseRotation * relativePosition);
-        //Debug.Log($"relativePosition: {relativePosition}, RealPosition: {RealPosition}");
+        //Debug.Log($"relativePosition: {_pointscalculator.Center}, RealPosition: {RealPosition}");
         return RealPosition;
     }
 

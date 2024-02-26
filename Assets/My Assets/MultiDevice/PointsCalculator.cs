@@ -189,21 +189,19 @@ public class PointsCalculator : MonoBehaviour
                         foreach (var vertex in vertices)
                         {
                             // 条件に合致するかチェック
-                            if (vertex.z > 0.1f && vertex.z <= 0.35f && vertex.x > -0.4f && vertex.x <= 0.2f)
+                            if (vertex.z > 0.35f && vertex.z <= 0.5f && vertex.x > -0.1f && vertex.x <= 0.1f)
                             {
                                 // Y座標の上下を逆にする
                                 Vector3 invertedYVertex = new Vector3(vertex.x, -vertex.y, vertex.z);
+                                //Vector3 invertedYVertex = new Vector3(vertex.x, vertex.y, vertex.z);
 
                                 sum += invertedYVertex;
                                 count++;
                             }
                         }
 
-                        if (count > 10000)
+                        if (count > 0)
                         {
-                            // 条件に合致する点群の数を出力
-                            //Debug.Log($"Filtered points count: {count}");
-
                             // 中心座標を計算
                             center = sum / count;
 
@@ -212,7 +210,7 @@ public class PointsCalculator : MonoBehaviour
                         }
                         else
                         {
-                            Debug.Log("Points < 10000.");
+                            Debug.Log("Points < 0.");
                         }
                     }
 
